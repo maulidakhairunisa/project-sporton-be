@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es2016",
-    "rootDir": "./src",
+    "rootDir": ".",
     // "moduleResolution": "node",
     "outDir": "./dist",
     "esModuleInterop": true,
@@ -10,6 +10,11 @@
     "strict": true,
     "skipLibCheck": true,
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src/**/*",
+    "api/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

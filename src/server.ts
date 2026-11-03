@@ -1,15 +1,17 @@
-import mongoose from "mongoose";
-import dotenv from "dotenv";
+import "dotenv/config";
 import app from "./app";
+import { connectDB } from "./config/db";
 
-dotenv.config();
+const PORT = process.env.PORT || 5001;
 
-const PORT = process.env.PORT || "5001";
-const MONGO_URI = process.env.MONGO_URI || "no-mongo-uri" ;
+connectDB()
+    .then(() => {
+        console.log("Connect to MongoDB");
 
-mongoose.connect(MONGO_URI).then(()=>{
-    console.log("Connect to MongoDB");
-    app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    })
+    .catch((error) => {
+        console.error("Error connecting to MongoDB:", error);
     });
-}).catch((error) => console.error("Error connecting to MongoDB: ", error));

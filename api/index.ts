@@ -1,23 +1,18 @@
-import mongoose from "mongoose";
-import dotenv from "dotenv";
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 import app from "../src/app";
+import { connectDB } from "../src/config/db";
 
-dotenv.config();
-
-const MONGO_URI = process.env.MONGO_URI || "no-mongo-uri";
-
-// Connect to MongoDB once (cached for serverless)
-let isConnected = false;
-
-const connectDB = async () => {
-  if (isConnected) return;
-  await mongoose.connect(MONGO_URI);
-  isConnected = true;
-  console.log("Connected to MongoDB");
-};
-
-// Export handler for Vercel serverless
-export default async function handler(req: any, res: any) {
-  await connectDB();
-  return app(req, res);
+export default async function handler(
+  req: VercelRequest,
+  res: VercelResponse
+) {
+  try {
+    await connectDB();
+    return app(req, res);
+  } catch (error) {
+    console.error("Database connection error:", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
 }
